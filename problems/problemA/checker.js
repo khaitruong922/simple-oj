@@ -14,8 +14,6 @@ readFile(outputPath, (e) => {
     writeFile(outputPath, "", (e) => {});
 });
 
-// Compare two output files
-
 const getLines = (path) => {
     const output = readFileSync(path, "utf-8");
     return output
