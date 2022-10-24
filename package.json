@@ -1,0 +1,14 @@
+{
+    "name": "simple-oj",
+    "version": "1.0.0",
+    "main": "app.js",
+    "license": "MIT",
+    "type": "module",
+    "scripts": {
+        "start": "node app.js",
+        "format": "npx prettier --write ."
+    },
+    "dependencies": {
+        "chalk": "^5.1.2"
+    }
+}
