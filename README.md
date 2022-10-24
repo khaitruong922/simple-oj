@@ -12,6 +12,7 @@ An attempt to build a simple NodeJS online judge.
 
 ```
 yarn
+docker compose build
 yarn start
 ```
 

@@ -1,11 +1,10 @@
 services:
-    app:
+    node:
         build:
             context: .
-            dockerfile: Dockerfile
+            dockerfile: node.Dockerfile
         image: nodejs
         network_mode: bridge
-
 networks:
     default:
-      internal: true
+        internal: true
