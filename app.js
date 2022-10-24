@@ -15,22 +15,22 @@ const init = async () => {
 
 const submit = async (filename) => {
     console.log(chalk.cyan(`Submitting ${filename}...`));
+    let color, verdict;
     try {
         let { stdout } = await exec(
             `docker compose run --no-deps --rm app bash -c "node ${filename} < ${inputFile} > ${outputPath} && node ${checkerFile}"`
         );
-
-        console.log(`Verdict for ${filename}:`);
         stdout = stdout.trim();
-        if (stdout === "AC") {
-            console.log(chalk.green(stdout));
-        } else {
-            console.log(chalk.red(stdout));
-        }
+
+        color = stdout === "AC" ? chalk.green : chalk.red;
+        verdict = stdout;
     } catch (e) {
-        console.log(`Verdict for ${filename}:`);
-        console.log(chalk.yellow(`RTE`));
+        verdict = "RTE";
+        color = chalk.yellow;
     }
+
+    console.log(`Verdict for ${filename}:`);
+    console.log(color(verdict));
 };
 
 const main = async () => {
