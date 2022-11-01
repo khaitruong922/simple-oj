@@ -1,8 +1,9 @@
 import { promisify } from "util";
 import { exec as _exec } from "child_process";
-import chalk from "chalk";
 import { getInputPath, getCheckerPath, getTestPath, getAllSubmissions, TMP_DIR } from "./config.js";
 import * as fs from "fs";
+import chalk from "chalk";
+import { makeVerdict } from "./util.js";
 
 export const exec = promisify(_exec);
 
@@ -12,17 +13,7 @@ const init = async () => {
     fs.mkdirSync(TMP_DIR);
 };
 
-const colors = {
-    AC: chalk.green,
-    RTE: chalk.yellow,
-};
-
-const makeVerdict = (submissionPath, content) => {
-    content = content.trim();
-    const color = colors[content] || chalk.red;
-    console.log("Verdict for", submissionPath);
-    console.log(color(content));
-};
+const runSubmissions = async (problem) => getAllSubmissions(problem).forEach((s) => submit(problem, s));
 
 const submit = async (problem, submissionPath) => {
     console.log(chalk.cyan(`Running ${submissionPath}...`));
@@ -31,9 +22,7 @@ const submit = async (problem, submissionPath) => {
     const outputPath = `${TMP_DIR}/${submissionFilename}.out`;
     let output;
     try {
-        const { stdout } = await exec(
-            `docker compose run --no-deps --rm node bash -c "node ${submissionPath} < ${inputPath}"`
-        );
+        const { stdout } = await exec(`docker compose run --rm node bash -c "node ${submissionPath} < ${inputPath}"`);
         output = stdout;
     } catch (e) {
         makeVerdict(submissionPath, "RTE");
@@ -47,11 +36,8 @@ const submit = async (problem, submissionPath) => {
     await fs.promises.unlink(outputPath);
 };
 
-const runSubmissions = async (problem) => getAllSubmissions(problem).forEach((s) => submit(problem, s));
-
 const main = async () => {
     await init();
-
     runSubmissions("problemA");
 };
 
