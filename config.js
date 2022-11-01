@@ -1,6 +1,7 @@
 import path from "path/posix";
 import { readdirSync } from "fs";
 
+export const TMP_DIR = "tmp";
 const PROBLEMS_PATH = "problems";
 const SUBMISSIONS_PATH = "submissions";
 const INPUT_FILE = "input";
