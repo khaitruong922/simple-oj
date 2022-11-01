@@ -1,7 +1,7 @@
 import { promisify } from "util";
 import { exec as _exec } from "child_process";
 import chalk from "chalk";
-import { getInputPath, getCheckerPath, getOutputPath, getAllSubmissions, TMP_DIR } from "./config.js";
+import { getInputPath, getCheckerPath, getTestPath, getAllSubmissions, TMP_DIR } from "./config.js";
 import * as fs from "fs";
 
 export const exec = promisify(_exec);
@@ -41,7 +41,8 @@ const submit = async (problem, submissionPath) => {
     }
     await fs.promises.writeFile(outputPath, output);
     const checkerPath = getCheckerPath(problem);
-    const { stdout: verdict } = await exec(`node ${checkerPath} < ${outputPath}`);
+    const testPath = getTestPath(problem);
+    const { stdout: verdict } = await exec(`node ${checkerPath} ${testPath} ${outputPath}`);
     makeVerdict(submissionPath, verdict);
     await fs.promises.unlink(outputPath);
 };
